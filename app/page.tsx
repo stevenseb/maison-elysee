@@ -1,12 +1,11 @@
-'use client'
+'use client';
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import ItemCard from '../components/ItemCard';
 
-// Define the interface for Item at the top of the file
 interface Item {
-  itemId: string;
+  _id: string;
   name: string;
   size: string[];
   mainColor: string;
@@ -17,6 +16,7 @@ interface Item {
   style: string;
   imageUrl: string;
   saleDiscount?: number;
+  quantity: number;
 }
 
 export default function Home() {
@@ -28,8 +28,16 @@ export default function Home() {
     const fetchItems = async () => {
       try {
         const res = await axios.get(`/api/items?page=${page}`);
-        if (res.data.data.length > 0) {
-          setItems((prevItems) => [...prevItems, ...res.data.data]);
+        const fetchedItems: Item[] = res.data.data;
+
+        if (fetchedItems.length > 0) {
+          // Check for duplicates before updating state
+          setItems((prevItems) => {
+            const newItems = fetchedItems.filter(
+              (item) => !prevItems.some((prevItem) => prevItem._id === item._id)
+            );
+            return [...prevItems, ...newItems];
+          });
         } else {
           setHasMore(false);
         }
@@ -59,12 +67,13 @@ export default function Home() {
   }, [hasMore]);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen p-4">
       <h1 className="text-4xl text-center py-8">Clothing Store</h1>
+
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {items.map((item) => (
-            <ItemCard key={item.itemId} item={item} />
+          {items.map((item: Item) => (
+            <ItemCard key={item._id} item={item} />
           ))}
         </div>
       </div>
