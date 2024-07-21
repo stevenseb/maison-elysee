@@ -22,6 +22,8 @@ export default function AdminPage() {
   const [showForm, setShowForm] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
   const [currentId, setCurrentId] = useState<string | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     fetchItems(setItems);
@@ -116,12 +118,29 @@ export default function AdminPage() {
     setCurrentId(null);
   };
 
+  const openDeleteModal = (id: string) => {
+    setItemToDelete(id);
+    setShowDeleteModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setItemToDelete(null);
+    setShowDeleteModal(false);
+  };
+
+  const confirmDelete = async () => {
+    if (itemToDelete) {
+      await handleDelete(itemToDelete, items, setItems);
+      closeDeleteModal();
+    }
+  };
+
   return (
     <div className="max-w-3xl w-full mx-auto p-4">
       <h1 className="text-center text-2xl font-bold mb-4">Add New Clothing Item to Inventory</h1>
       <p className="text-center text-gray-400 mb-4 py-2">Scroll down or minimize form to view inventory &gt;&gt;&gt;</p>
       <button
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded border border-white"
+        className="mb-1 px-2 py-1 bg-blue-500 text-white rounded border border-white"
         onClick={() => setShowForm(!showForm)}
       >
         {showForm ? 'Minimize Form' : 'Expand Form'}
@@ -270,35 +289,35 @@ export default function AdminPage() {
             <li key={item._id} className="flex justify-between items-center border-b py-2">
               <div>
                 <p>Name: {item.name}</p>
-                <p>Quantity: {item.quantity}</p>
+                <p>Quantity: {item.quantity}</p><p>Price: ${item.price}</p>
               </div>
-              <div className="flex space-x-2">
+              <div className="flex flex-wrap my-5 space-x-2">
                 <button
-                  className="px-4 py-2 bg-red-500 text-white rounded border border-white"
-                  onClick={() => handleDelete(item._id!, items, setItems)} // The `!` operator asserts that the value is not undefined
+                  className="mb-4 ml-2 px-1 py-2 bg-red-500 text-white rounded border border-white"
+                  onClick={() => openDeleteModal(item._id!)} // The `!` operator asserts that the value is not undefined
                 >
                   Delete
                 </button>
                 <button
-                  className="px-4 py-2 bg-green-500 text-white rounded border border-white"
+                  className="mb-4 px-2 py-2 bg-green-500 text-white rounded border border-white"
                   onClick={() => handleUpdateQuantity(item._id!, 1, items, setItems)} // The `!` operator asserts that the value is not undefined
                 >
                   +
                 </button>
                 <button
-                  className="px-4 py-2 bg-yellow-500 text-white rounded border border-white"
+                  className="mb-4  px-3 py-2 bg-yellow-500 text-white rounded border border-white"
                   onClick={() => handleUpdateQuantity(item._id!, -1, items, setItems)} // The `!` operator asserts that the value is not undefined
                 >
                   -
                 </button>
                 <button
-                  className="px-4 py-2 bg-blue-500 text-white rounded border border-white"
+                  className="mb-4 px-2 py-2 bg-blue-500 text-white rounded border border-white"
                   onClick={() => handlePrepopulate(item)}
                 >
                   Update
                 </button>
                 <button
-                  className="px-4 py-2 bg-blue-500 text-white rounded border border-white"
+                  className="mb-4 px-2 py-2 bg-blue-500 text-white rounded border border-white"
                   onClick={() => handlePrepopulateSimilar(item)}
                 >
                   Similar
@@ -308,6 +327,28 @@ export default function AdminPage() {
           ))}
         </ul>
       </div>
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
+          <div className="bg-white p-6 rounded-lg">
+            <h2 className="text-xl font-bold mb-4 text-black">Are you sure you want to delete this item?</h2>
+            <div className="flex justify-end space-x-4">
+              <button
+                className="px-4 py-2 bg-gray-500 text-white rounded"
+                onClick={closeDeleteModal}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded"
+                onClick={confirmDelete}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
