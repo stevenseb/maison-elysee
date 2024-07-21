@@ -1,57 +1,63 @@
 'use client';
-import React, { useState } from "react";
-import { HoveredLink, Menu, MenuItem, ProductItem } from "./ui/navbar-menu";
-import { cn } from "@/lib/utils";
+
+import React, { useState } from 'react';
+import { HoveredLink, Menu, MenuItem, ProductItem } from './ui/navbar-menu';
+import { cn } from '@/lib/utils';
 
 export default function Navbar({ className }: { className?: string }) {
   const [active, setActive] = useState<string | null>(null);
   return (
-    <div
-      className={cn("fixed top-3 inset-x-0 max-w-2xl mx-auto z-50 opacity-80", className)}
-    >
+    <div className={cn('fixed top-2 inset-x-0 mx-auto z-50 navbar opacity-86', className)}>
       <Menu setActive={setActive}>
-        <MenuItem setActive={setActive} active={active} item="Services">
-          <div className="flex flex-col space-y-4 text-sm">
-            <HoveredLink href="/web-dev">Web Development</HoveredLink>
-            <HoveredLink href="/interface-design">Interface Design</HoveredLink>
-            <HoveredLink href="/seo">Search Engine Optimization</HoveredLink>
-            <HoveredLink href="/branding">Branding</HoveredLink>
-          </div>
-        </MenuItem>
-        <MenuItem setActive={setActive} active={active} item="Products">
-          <div className="  text-sm grid grid-cols-2 gap-10 p-4">
+        <MenuItem setActive={setActive} active={active} item="New">
+          <div className="dropdown text-sm grid grid-cols-2 gap-5 p-2 opacity-1">
             <ProductItem
-              title="Algochurn"
-              href="https://algochurn.com"
-              src="https://assets.aceternity.com/demos/algochurn.webp"
-              description="Prepare for tech interviews like never before."
+              title="Summer Styles For Women"
+              href="https://maisonelysee.com"
+              src="/SwimwearSummer.jpg"
+              description="Check out our latest new fashions for the hot summer sun!"
             />
             <ProductItem
-              title="Tailwind Master Kit"
-              href="https://tailwindmasterkit.com"
-              src="https://assets.aceternity.com/demos/tailwindmasterkit.webp"
-              description="Production ready Tailwind css components for your next project"
+              title="Summer Styles For Men"
+              href="https://maisonelysee.com"
+              src="/SwimwearSummerMen.jpg"
+              description="We have the hottest in men's summer fashion in stock for a limited time!"
             />
             <ProductItem
-              title="Moonbeam"
-              href="https://gomoonbeam.com"
-              src="https://assets.aceternity.com/demos/Screenshot+2024-02-21+at+11.51.31%E2%80%AFPM.png"
-              description="Never write from scratch again. Go from idea to blog in minutes."
+              title="Limited Edition Footwear"
+              href="https://maisonelysee.com"
+              src="/ShoesME.jpg"
+              description="Don't miss out on these latest and greatest footwear &arr;"
             />
             <ProductItem
-              title="Rogue"
-              href="https://userogue.com"
-              src="https://assets.aceternity.com/demos/Screenshot+2024-02-21+at+11.47.07%E2%80%AFPM.png"
-              description="Respond to government RFPs, RFIs and RFQs 10x faster using AI"
+              title="Spring Closeout Up to 50% OFF!!!"
+              href="https://maisonelysee.com"
+              src="/SpringCO.jpg"
+              description="Be sure to check out our closeout pricing on remaining stock!"
             />
           </div>
         </MenuItem>
-        <MenuItem setActive={setActive} active={active} item="Pricing">
-          <div className="flex flex-col space-y-4 text-sm">
-            <HoveredLink href="/hobby">Hobby</HoveredLink>
-            <HoveredLink href="/individual">Individual</HoveredLink>
-            <HoveredLink href="/team">Team</HoveredLink>
-            <HoveredLink href="/enterprise">Enterprise</HoveredLink>
+        <MenuItem setActive={setActive} active={active} item="Women">
+          <div className="dropdown flex flex-col space-y-4 text-sm">
+            <HoveredLink href="/dresses-and-shirts">Dresses & Jumpsuits</HoveredLink>
+            <HoveredLink href="/shirts-and-tops">Shirts & Tops</HoveredLink>
+            <HoveredLink href="/jeans-and-pants">Jeans & Pants</HoveredLink>
+            <HoveredLink href="/t-shirts">T-shirts</HoveredLink>
+          </div>
+        </MenuItem>
+        <MenuItem setActive={setActive} active={active} item="Men">
+          <div className="dropdown flex flex-col space-y-4 text-sm">
+            <HoveredLink href="/t-shirts">T-shirts</HoveredLink>
+            <HoveredLink href="/jeans-and-shirts">Jeans & Pants</HoveredLink>
+            <HoveredLink href="/sweaters">Sweaters</HoveredLink>
+            <HoveredLink href="/shorts">Shorts</HoveredLink>
+          </div>
+        </MenuItem>
+        <MenuItem setActive={setActive} active={active} item="My Account">
+          <div className="dropdown flex flex-col space-y-4 text-sm">
+            <HoveredLink href="/signup">Signup</HoveredLink>
+            <HoveredLink href="/login">Login</HoveredLink>
+            <HoveredLink href="/cart">Shopping Cart</HoveredLink>
           </div>
         </MenuItem>
       </Menu>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import ItemCard from '../components/ItemCard';
+import BrandCard from '../components/BrandCard';
 
 interface Item {
   _id: string;
@@ -73,6 +74,7 @@ export default function Home() {
           backgroundImage: "url('/Hero1.jpg')",
         }}
       >
+        <BrandCard />
       </div>
 
       <div className="container mx-auto px-4">
