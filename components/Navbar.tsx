@@ -3,11 +3,42 @@
 import React, { useState } from 'react';
 import { HoveredLink, Menu, MenuItem, ProductItem } from './ui/navbar-menu';
 import { cn } from '@/lib/utils';
+import SignupModal from './SignupModal';
+import LoginModal from './LoginModal';
 
 export default function Navbar({ className }: { className?: string }) {
   const [active, setActive] = useState<string | null>(null);
+  const [isSignupModalOpen, setSignupModalOpen] = useState(false);
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+
+  const closeModals = () => {
+    setSignupModalOpen(false);
+    setLoginModalOpen(false);
+  };
+
+  const handleMenuClick = (menuItem: string) => {
+    closeModals();
+    setActive(menuItem);
+  };
+
+  const handleSignupClick = () => {
+    closeModals();
+    setSignupModalOpen(true);
+    setActive(null);
+  };
+
+  const handleLoginClick = () => {
+    closeModals();
+    setLoginModalOpen(true);
+    setActive(null);
+  };
+
   return (
-    <div className={cn('fixed top-2 inset-x-0 mx-auto z-50 navbar opacity-86', className)}>
+    <>
+    <SignupModal isOpen={isSignupModalOpen} onClose={closeModals} />
+    <LoginModal isOpen={isLoginModalOpen} onClose={closeModals} />
+
+    <div className={cn('fixed top-1 inset-x-0 mx-auto z-50 navbar opacity-86', className)}>
       <Menu setActive={setActive}>
         <MenuItem setActive={setActive} active={active} item="New">
           <div className="dropdown text-sm grid grid-cols-2 gap-5 p-2 opacity-1">
@@ -55,12 +86,13 @@ export default function Navbar({ className }: { className?: string }) {
         </MenuItem>
         <MenuItem setActive={setActive} active={active} item="My Account">
           <div className="dropdown flex flex-col space-y-4 text-sm">
-            <HoveredLink href="/signup">Signup</HoveredLink>
-            <HoveredLink href="/login">Login</HoveredLink>
+          <HoveredLink href="#" onClick={handleSignupClick}>Signup</HoveredLink>
+              <HoveredLink href="#" onClick={handleLoginClick}>Login</HoveredLink>
             <HoveredLink href="/cart">Shopping Cart</HoveredLink>
           </div>
         </MenuItem>
       </Menu>
     </div>
+    </>
   );
 }

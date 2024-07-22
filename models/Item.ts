@@ -1,7 +1,22 @@
-const mongoose = require('mongoose');
+import mongoose, { Document, Schema, Model } from 'mongoose';
 const { v4: uuidv4 } = require('uuid');
 
-const ItemSchema = new mongoose.Schema({
+export interface IItem extends Document {
+  itemId: string;
+  name: string;
+  size: string[];
+  mainColor: string;
+  price: number;
+  description: string;
+  gender: 'mens' | 'womens' | 'unisex';
+  category: 'shirt' | 'pants' | 'dress' | 'shorts' | 't-shirt';
+  style: string;
+  imageUrl: string;
+  saleDiscount: number;
+  quantity: number;
+}
+
+const ItemSchema: Schema<IItem> = new mongoose.Schema({
   itemId: {
     type: String,
     default: uuidv4,
@@ -56,4 +71,6 @@ const ItemSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.models.Item || mongoose.model('Item', ItemSchema);
+const Item: Model<IItem> = mongoose.models.Item || mongoose.model<IItem>('Item', ItemSchema);
+
+export default Item;
