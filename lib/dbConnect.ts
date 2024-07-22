@@ -11,7 +11,6 @@ interface MongooseCache {
   promise: Promise<typeof mongoose> | null;
 }
 
-// Use a symbol to ensure it's unique to avoid potential conflicts.
 const globalWithMongoose = global as typeof globalThis & {
   mongoose: MongooseCache;
 };
