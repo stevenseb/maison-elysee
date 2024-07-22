@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
+import mongoose, { Schema, Document, Model, model } from 'mongoose';
 const { v4: uuidv4 } = require('uuid');
 
 export interface IUser extends Document {

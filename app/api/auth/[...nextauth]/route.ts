@@ -1,32 +1,18 @@
 import NextAuth, { AuthOptions, Session, User as NextAuthUser } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import dbConnect from '@/lib/dbConnect';
-import User, { IUser } from '@/models/User';
+import User from '@/models/User';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
-declare module 'next-auth' {
-  interface Session {
-    user: {
-      id: string;
-      name?: string | null;
-      email?: string | null;
-      image?: string | null;
-    };
-  }
-}
-
-declare module 'next-auth/jwt' {
-  interface JWT {
-    id: string;
-  }
-}
+const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'your_jwt_secret';
 
 const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        username: { label: 'Username', type: 'text' },
+        usernameOrEmail: { label: 'Username or Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
@@ -36,10 +22,17 @@ const authOptions: AuthOptions = {
 
         await dbConnect();
 
-        const user = await User.findOne({ username: credentials.username }).exec() as IUser | null;
+        const user = await User.findOne({
+          $or: [{ username: credentials.usernameOrEmail }, { email: credentials.usernameOrEmail }],
+        });
 
         if (user && bcrypt.compareSync(credentials.password, user.hashedPassword)) {
-          return { id: user._id.toString(), name: user.username };
+          const token = jwt.sign(
+            { userId: user._id.toString(), username: user.username },
+            JWT_SECRET,
+            { expiresIn: '1h' }
+          );
+          return { id: user._id.toString(), name: user.username, token };
         }
 
         return null;
@@ -53,18 +46,20 @@ const authOptions: AuthOptions = {
     strategy: 'jwt',
   },
   jwt: {
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: JWT_SECRET,
   },
   callbacks: {
     async session({ session, token }: { session: Session, token: any }) {
       if (session.user) {
         session.user.id = token.id as string;
+        session.user.token = token.token as string;
       }
       return session;
     },
-    async jwt({ token, user }: { token: any, user?: NextAuthUser & { id: string } }) {
+    async jwt({ token, user }: { token: any, user?: NextAuthUser }) {
       if (user) {
         token.id = user.id;
+        token.token = user.token;
       }
       return token;
     },

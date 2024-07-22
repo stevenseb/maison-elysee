@@ -16,7 +16,26 @@ const SignupModal: React.FC<SignupModalProps> = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Implement the signup logic here
+    
+    try {
+        const response = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password, firstName, lastName, email }),
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to signup');
+        }
+  
+        // Handle success (e.g., show a success message, close modal, etc.)
+        onClose();
+      } catch (error) {
+        console.error('Error during signup:', error);
+        // Handle error (e.g., show an error message)
+      }
   };
 
   const handleClickOutside = (e: React.MouseEvent) => {

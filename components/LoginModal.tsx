@@ -1,6 +1,5 @@
-'use client';
-
 import React, { useState } from 'react';
+import { signIn } from 'next-auth/react';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -8,12 +7,23 @@ interface LoginModalProps {
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
-  const [username, setUsername] = useState('');
+  const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Implement the login logic here
+
+    const res = await signIn('credentials', {
+      redirect: false,
+      usernameOrEmail,
+      password,
+    });
+
+    if (res?.ok) {
+      onClose();
+    } else {
+      console.error('Error during login:', res);
+    }
   };
 
   const handleClickOutside = (e: React.MouseEvent) => {
@@ -30,11 +40,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         <h2 className="text-2xl mb-4 text-white">Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block mb-1 text-white">Username</label>
+            <label className="block mb-1 text-white">Username or Email</label>
             <input
               type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={usernameOrEmail}
+              onChange={(e) => setUsernameOrEmail(e.target.value)}
               className="w-full px-4 py-2 border rounded bg-white text-black"
               required
             />
