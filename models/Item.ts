@@ -1,8 +1,11 @@
-import mongoose, { Document, Schema, Model } from 'mongoose';
-const { v4: uuidv4 } = require('uuid');
+import mongoose, { Schema, Document, Model } from 'mongoose';
 
-export interface IItem extends Document {
-  itemId: string;
+interface Image {
+  url: string;
+  main: boolean;
+}
+
+export interface ItemDocument extends Document {
   name: string;
   size: string[];
   mainColor: string;
@@ -11,66 +14,25 @@ export interface IItem extends Document {
   gender: 'mens' | 'womens' | 'unisex';
   category: 'shirt' | 'pants' | 'dress' | 'shorts' | 't-shirt';
   style: string;
-  imageUrl: string;
-  saleDiscount: number;
+  images: Image[];
+  saleDiscount?: number;
   quantity: number;
 }
 
-const ItemSchema: Schema<IItem> = new mongoose.Schema({
-  itemId: {
-    type: String,
-    default: uuidv4,
-    unique: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  size: {
-    type: [String],
-    required: true,
-  },
-  mainColor: {
-    type: String,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  gender: {
-    type: String,
-    enum: ['mens', 'womens', 'unisex'],
-    required: true,
-  },
-  category: {
-    type: String,
-    enum: ['shirt', 'pants', 'dress', 'shorts', 't-shirt'],
-    required: true,
-  },
-  style: {
-    type: String,
-    required: true,
-  },
-  imageUrl: {
-    type: String,
-    required: true,
-  },
-  saleDiscount: {
-    type: Number,
-    default: 0,
-  },
-  quantity: {
-    type: Number,
-    default: 1,
-    required: true,
-  },
-});
+const ItemSchema: Schema<ItemDocument> = new Schema({
+  name: { type: String, required: true },
+  size: { type: [String], required: true },
+  mainColor: { type: String, required: true },
+  price: { type: Number, required: true },
+  description: { type: String, required: true },
+  gender: { type: String, required: true },
+  category: { type: String, required: true },
+  style: { type: String, required: true },
+  images: [{ url: String, main: Boolean }],
+  saleDiscount: { type: Number, default: 0 },
+  quantity: { type: Number, required: true },
+}, { timestamps: true });
 
-const Item: Model<IItem> = mongoose.models.Item || mongoose.model<IItem>('Item', ItemSchema);
+const Item: Model<ItemDocument> = mongoose.models.Item || mongoose.model<ItemDocument>('Item', ItemSchema);
 
 export default Item;

@@ -1,7 +1,8 @@
+// models/Order.ts
 import mongoose, { Schema, Document, Model } from 'mongoose';
 const { v4: uuidv4 } = require('uuid');
 
-interface OrderItem {
+export interface IOrderItem extends Document {
   itemId: string;
   name: string;
   size: string;
@@ -11,14 +12,14 @@ interface OrderItem {
 }
 
 export interface IOrder extends Document {
-  orderId: string;
   userId: string;
+  orderId: string;
   orderDate: Date;
   shippingDate: Date;
-  items: OrderItem[];
+  items: IOrderItem[];
 }
 
-const OrderItemSchema: Schema<OrderItem> = new Schema({
+const OrderItemSchema: Schema = new Schema({
   itemId: { type: String, required: true },
   name: { type: String, required: true },
   size: { type: String, required: true },
@@ -28,11 +29,11 @@ const OrderItemSchema: Schema<OrderItem> = new Schema({
 });
 
 const OrderSchema: Schema<IOrder> = new Schema({
-  orderId: { type: String, default: uuidv4, unique: true },
   userId: { type: String, required: true },
+  orderId: { type: String, default: uuidv4, unique: true },
   orderDate: { type: Date, default: Date.now },
-  shippingDate: { type: Date, default: () => new Date(Date.now() + 2 * 24 * 60 * 60 * 1000) },
-  items: { type: [OrderItemSchema], required: true },
+  shippingDate: { type: Date, required: true },
+  items: [OrderItemSchema],
 });
 
 const Order: Model<IOrder> = mongoose.models.Order || mongoose.model<IOrder>('Order', OrderSchema);

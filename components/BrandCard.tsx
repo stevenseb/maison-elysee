@@ -36,7 +36,7 @@ export default function BrandCard() {
 
   return (
     <div
-      className={`absolute top-[170px] left-[30px] lg:w-64 md:w-56 sm:w-40 p-0 bg-black bg-opacity-70 rounded-lg shadow-xl transition-transform duration-300 ${
+      className={`absolute top-[170px] left-[20px] lg:left-[80px] lg:w-64 md:w-56 sm:w-40 p-0 bg-black bg-opacity-70 rounded-lg shadow-xl transition-transform duration-300 ${
         hovered ? 'transform scale-150' : ''
       }`}
       onMouseEnter={() => setHovered(true)}

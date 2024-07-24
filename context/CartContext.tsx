@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
 
 interface CartItem {
-  itemId: string;
+  _id: string;
   name: string;
   size: string;
   mainColor: string;
@@ -17,9 +17,9 @@ interface CartState {
 
 type CartAction =
   | { type: 'ADD_ITEM'; payload: CartItem }
-  | { type: 'REMOVE_ITEM'; payload: { itemId: string, size: string, mainColor: string } }
-  | { type: 'INCREASE_QUANTITY'; payload: { itemId: string, size: string, mainColor: string } }
-  | { type: 'DECREASE_QUANTITY'; payload: { itemId: string, size: string, mainColor: string } }
+  | { type: 'REMOVE_ITEM'; payload: { _id: string, size: string, mainColor: string } }
+  | { type: 'INCREASE_QUANTITY'; payload: { _id: string, size: string, mainColor: string } }
+  | { type: 'DECREASE_QUANTITY'; payload: { _id: string, size: string, mainColor: string } }
   | { type: 'CLEAR_CART' }
   | { type: 'REPLACE_CART'; payload: CartItem[] }
   | { type: 'TOGGLE_CART_VISIBILITY'; payload: boolean };
@@ -31,7 +31,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
     case 'ADD_ITEM':
       const existingItemIndex = state.items.findIndex(
         (item) =>
-          item.itemId === action.payload.itemId &&
+          item._id === action.payload._id &&
           item.size === action.payload.size &&
           item.mainColor === action.payload.mainColor
       );
@@ -49,7 +49,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         ...state,
         items: state.items.filter(
           (item) =>
-            item.itemId !== action.payload.itemId ||
+            item._id !== action.payload._id ||
             item.size !== action.payload.size ||
             item.mainColor !== action.payload.mainColor
         ),
@@ -59,7 +59,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       return {
         ...state,
         items: state.items.map((item) =>
-          item.itemId === action.payload.itemId &&
+          item._id === action.payload._id &&
           item.size === action.payload.size &&
           item.mainColor === action.payload.mainColor
             ? { ...item, quantity: item.quantity + 1 }
@@ -72,7 +72,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         ...state,
         items: state.items
           .map((item) =>
-            item.itemId === action.payload.itemId &&
+            item._id === action.payload._id &&
             item.size === action.payload.size &&
             item.mainColor === action.payload.mainColor
               ? { ...item, quantity: item.quantity - 1 }

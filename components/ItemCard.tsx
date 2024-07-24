@@ -3,18 +3,24 @@
 import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 
+export interface Image {
+  url: string;
+  main: boolean;
+}
+
 export interface Item {
-  itemId: string;
+  _id: string;
   name: string;
   size: string[];
   mainColor: string;
   price: number;
   description: string;
-  gender: string;
-  category: string;
+  gender: 'mens' | 'womens' | 'unisex';
+  category: 'shirt' | 'pants' | 'dress' | 'shorts' | 't-shirt';
   style: string;
-  imageUrl: string;
+  images: Image[];
   saleDiscount?: number;
+  quantity: number;
 }
 
 interface ItemCardProps {
@@ -22,7 +28,7 @@ interface ItemCardProps {
 }
 
 export default function ItemCard({ item }: ItemCardProps) {
-  const { itemId, name, size, mainColor, price, description, gender, category, style, imageUrl, saleDiscount } = item;
+  const { _id, name, size, mainColor, price, description, gender, category, style, images, saleDiscount } = item;
 
   const discountedPrice = saleDiscount ? (price - (price * saleDiscount / 100)).toFixed(2) : price.toFixed(2);
 
@@ -34,7 +40,7 @@ export default function ItemCard({ item }: ItemCardProps) {
     dispatch({
       type: 'ADD_ITEM',
       payload: {
-        itemId,
+        _id,
         name,
         size: selectedSize,
         mainColor,
@@ -44,7 +50,7 @@ export default function ItemCard({ item }: ItemCardProps) {
     });
     dispatch({ type: 'TOGGLE_CART_VISIBILITY', payload: true });
     console.log('Item dispatched to cart:', {
-      itemId,
+      _id,
       name,
       size: selectedSize,
       mainColor,
@@ -53,12 +59,19 @@ export default function ItemCard({ item }: ItemCardProps) {
     }); // Log to verify dispatch
   };
 
+  // Define the base URL for your Bunny CDN pull zone
+  const baseUrl = 'https://maison-elysee.b-cdn.net/';
+
+  // Get the main image URL or the first image if no main image is set
+  const mainImageUrl = images.find(img => img.main)?.url || images[0]?.url;
+  const fullImageUrl = `${baseUrl}${mainImageUrl}`;
+
   return (
     <div className="bg-gray-800 p-6 rounded-lg shadow-md">
-      <Link href={`/item/${itemId}`}>
+      <Link href={`/item/${_id}`}>
         <div className="relative pt-[75%] overflow-hidden rounded-md mb-6">
           <img
-            src={imageUrl}
+            src={fullImageUrl}
             alt={name}
             className="absolute top-0 left-0 w-full h-full object-cover"
           />
