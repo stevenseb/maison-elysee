@@ -1,34 +1,28 @@
-'use client';
-
 import './globals.css';
-import { ThemeProvider } from 'next-themes';
-import { SessionProvider } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
-import Navbar from '../components/Navbar';
-import CartSidebar from '../components/CartSidebar';
-import { CartProvider } from '../context/CartContext';
+import { Metadata } from 'next';
+import { Providers } from './providers';
+import ClientLayout from './ClientLayout';
+import packageInfo from '../package.json';
 
+export const metadata: Metadata = {
+  title: packageInfo.name,
+  description: 'Your app description',
+  icons: {
+    icon: '/favicon.ico',
+  },
+};
 
 export default function RootLayout({
-    children,
-  }: {
-    children: React.ReactNode;
-  }) {
-    const pathname = usePathname();
-    const isAdminPage = pathname === '/admin';
-
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body className="bg-gray-900 text-white">
-        <ThemeProvider attribute="class">
-            <SessionProvider>
-                <CartProvider>
-                {!isAdminPage && <Navbar />}
-                {!isAdminPage && <CartSidebar />}
-                {children}
-                </CartProvider>
-          </SessionProvider>
-        </ThemeProvider>
+        <Providers>
+          <ClientLayout>{children}</ClientLayout>
+        </Providers>
       </body>
     </html>
   );

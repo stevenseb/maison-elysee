@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, ChangeEvent, FormEvent } from 'react';
-import { Item, ItemFormState } from './types';
+import { Item, Image } from './types';
 import { fetchItems, handleDelete, handleUpdateQuantity, handleUpdateItem } from './utils';
 
 export default function AdminPage() {
-  const [form, setForm] = useState<ItemFormState>({
+  const [form, setForm] = useState<Item>({
+    _id: '',
     name: '',
     size: [],
     mainColor: '',
@@ -51,7 +52,7 @@ export default function AdminPage() {
     Object.entries(form).forEach(([key, value]) => {
       if (Array.isArray(value)) {
         value.forEach(item => formData.append(key, item));
-      } else {
+      } else if (key !== 'images') {
         formData.append(key, String(value));
       }
     });
@@ -76,6 +77,7 @@ export default function AdminPage() {
         console.log('Upload and save successful:', data);
         setCreatedItemId(data.item._id);
         setForm({
+          _id: '',
           name: '',
           size: [],
           mainColor: '',
@@ -102,73 +104,82 @@ export default function AdminPage() {
   };
 
   return (
-    <div>
-      <h1>Add New Clothing Item to Inventory</h1>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-6">Add New Clothing Item to Inventory</h1>
       {createdItemId && (
-        <p>Item created successfully! Item ID: {createdItemId}</p>
+        <p className="text-green-500 mb-4">Item created successfully! Item ID: {createdItemId}</p>
       )}
-      <p>Scroll down or minimize form to view inventory </p>
-      <button onClick={() => setShowForm(!showForm)}>
+      <p className="mb-4">Scroll down or minimize form to view inventory &rarr;&rarr;</p>
+      <button 
+        onClick={() => setShowForm(!showForm)}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
+      >
         {showForm ? 'Minimize Form' : 'Expand Form'}
       </button>
       {showForm && (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-300">Name</label>
             <input
               type="text"
               id="name"
               name="name"
               value={form.name}
               onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
             />
           </div>
           <div>
-            <label htmlFor="size">Size (comma separated)</label>
+            <label htmlFor="size" className="block text-sm font-medium text-gray-300">Size (comma separated)</label>
             <input
               type="text"
               id="size"
               name="size"
               value={form.size.join(',')}
               onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
             />
           </div>
           <div>
-            <label htmlFor="mainColor">Main Color</label>
+            <label htmlFor="mainColor" className="block text-sm font-medium text-gray-300">Main Color</label>
             <input
               type="text"
               id="mainColor"
               name="mainColor"
               value={form.mainColor}
               onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
             />
           </div>
           <div>
-            <label htmlFor="price">Price</label>
+            <label htmlFor="price" className="block text-sm font-medium text-gray-300">Price</label>
             <input
               type="number"
               id="price"
               name="price"
               value={form.price}
               onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
             />
           </div>
           <div>
-            <label htmlFor="description">Description</label>
+            <label htmlFor="description" className="block text-sm font-medium text-gray-300">Description</label>
             <textarea
               id="description"
               name="description"
               value={form.description}
               onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
             />
           </div>
           <div>
-            <label htmlFor="gender">Gender</label>
+            <label htmlFor="gender" className="block text-sm font-medium text-gray-300">Gender</label>
             <select
               id="gender"
               name="gender"
               value={form.gender}
               onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
             >
               <option value="mens">Mens</option>
               <option value="womens">Womens</option>
@@ -176,12 +187,13 @@ export default function AdminPage() {
             </select>
           </div>
           <div>
-            <label htmlFor="category">Category</label>
+            <label htmlFor="category" className="block text-sm font-medium text-gray-300">Category</label>
             <select
               id="category"
               name="category"
               value={form.category}
               onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
             >
               <option value="shirt">Shirt</option>
               <option value="pants">Pants</option>
@@ -191,62 +203,71 @@ export default function AdminPage() {
             </select>
           </div>
           <div>
-            <label htmlFor="style">Style</label>
+            <label htmlFor="style" className="block text-sm font-medium text-gray-300">Style</label>
             <input
               type="text"
               id="style"
               name="style"
               value={form.style}
               onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
             />
           </div>
           <div>
-            <label htmlFor="images">Images</label>
+            <label htmlFor="images" className="block text-sm font-medium text-gray-300">Images</label>
             <input
               type="file"
               id="images"
               name="images"
               multiple
               onChange={handleImageChange}
+              className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
             />
           </div>
           <div>
-            <label htmlFor="mainImageIndex">Main Image Index</label>
+            <label htmlFor="mainImageIndex" className="block text-sm font-medium text-gray-300">Main Image Index</label>
             <input
               type="number"
               id="mainImageIndex"
               name="mainImageIndex"
               value={mainImageIndex}
               onChange={(e) => handleMainImageChange(Number(e.target.value))}
-              className="w-full px-4 py-2 border rounded bg-gray-700 text-white"
+              className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
             />
             {images.map((_, index) => (
-              <div key={index}>
-                <label>Image {index + 1}</label>
+              <div key={index} className="mt-2">
+                <label className="text-sm text-gray-300">Image {index + 1}</label>
               </div>
             ))}
           </div>
           <div>
-            <label htmlFor="saleDiscount">Sale Discount</label>
+            <label htmlFor="saleDiscount" className="block text-sm font-medium text-gray-300">Sale Discount</label>
             <input
               type="number"
               id="saleDiscount"
               name="saleDiscount"
               value={form.saleDiscount}
               onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
             />
           </div>
           <div>
-            <label htmlFor="quantity">Quantity</label>
+            <label htmlFor="quantity" className="block text-sm font-medium text-gray-300">Quantity</label>
             <input
               type="number"
               id="quantity"
               name="quantity"
               value={form.quantity}
               onChange={handleChange}
+              className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
             />
           </div>
-          <button type="submit">Add Item</button>
+          <button 
+            type="submit"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Add Item
+          </button>
         </form>
       )}
     </div>
