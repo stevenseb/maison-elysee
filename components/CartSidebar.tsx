@@ -32,7 +32,7 @@ const CartSidebar = () => {
           ) : (
             <>
               {state.items.map((item) => (
-                <div key={`${item.itemId}-${item.size}-${item.mainColor}`} className="mb-4">
+                <div key={`${item._id}-${item.size}-${item.mainColor}`} className="mb-4">
                   <div className="flex justify-between">
                     <p className="pr-4 text-orange-300">{item.name}</p>
                     <p className="text-orange-500">${item.price.toFixed(2)}</p>
@@ -44,8 +44,8 @@ const CartSidebar = () => {
                   <div className="flex justify-between">
                     <p>Quantity: {item.quantity}</p>
                     <div>
-                      <button onClick={() => dispatch({ type: 'INCREASE_QUANTITY', payload: { itemId: item.itemId, size: item.size, mainColor: item.mainColor } })}>&uarr;</button>
-                      <button onClick={() => dispatch({ type: 'DECREASE_QUANTITY', payload: { itemId: item.itemId, size: item.size, mainColor: item.mainColor } })}>&darr;</button>
+                      <button onClick={() => dispatch({ type: 'INCREASE_QUANTITY', payload: { _id: item._id, size: item.size, mainColor: item.mainColor } })}>&uarr;</button>
+                      <button onClick={() => dispatch({ type: 'DECREASE_QUANTITY', payload: { _id: item._id, size: item.size, mainColor: item.mainColor } })}>&darr;</button>
                     </div>
                   </div>
                 </div>

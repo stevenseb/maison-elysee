@@ -6,9 +6,9 @@ import dbConnect from '@/lib/dbConnect';
 import Item from '@/models/Item';
 
 export const runtime = 'nodejs';
-export const api = {
-  bodyParser: false,
-};
+// export const api = {
+//   bodyParser: false,
+// };
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData();

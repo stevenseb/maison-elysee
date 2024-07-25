@@ -3,7 +3,8 @@ export interface Image {
     main: boolean;
   }
   
-  export interface Item {
+export interface Item {
+    _id: string;
     name: string;
     size: string[];
     mainColor: string;
@@ -16,6 +17,8 @@ export interface Image {
     saleDiscount?: number;
     quantity: number;
   }
+  
+  export type ItemFormState = Omit<Item, '_id' | 'images'> & { images: File[] };
   
   
   

@@ -57,7 +57,7 @@ const CheckoutPage = () => {
           body: JSON.stringify({
             userId: session?.user?.id,
             items: state.items.map(item => ({
-              itemId: item.itemId,
+              itemId: item._id,
               name: item.name,
               size: item.size,
               mainColor: item.mainColor,
@@ -101,7 +101,7 @@ const CheckoutPage = () => {
         <h2 className="text-2xl mb-4">Order Summary</h2>
         <ul>
           {state.items.map((item) => (
-            <li key={`${item.itemId}-${item.size}-${item.mainColor}`} className="mb-4">
+            <li key={`${item._id}-${item.size}-${item.mainColor}`} className="mb-4">
               <div className="flex justify-between">
                 <p>{item.name}</p>
                 <p>${item.price.toFixed(2)}</p>
