@@ -48,7 +48,7 @@ export default function AdminPage() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData();
-
+  
     Object.entries(form).forEach(([key, value]) => {
       if (Array.isArray(value)) {
         value.forEach(item => formData.append(key, item));
@@ -56,7 +56,7 @@ export default function AdminPage() {
         formData.append(key, String(value));
       }
     });
-
+  
     if (images.length > 0) {
       formData.append('mainImage', images[mainImageIndex]);
       images.forEach((image, index) => {
@@ -65,13 +65,13 @@ export default function AdminPage() {
         }
       });
     }
-
+  
     try {
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         console.log('Upload and save successful:', data);
@@ -102,6 +102,7 @@ export default function AdminPage() {
       alert('Error. Please try again.');
     }
   };
+  
 
   return (
     <div className="container mx-auto px-4 py-8">

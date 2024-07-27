@@ -52,3 +52,14 @@ TaskWave is an easy to use and feature-rich kanban board style system. It allows
 
 
 ### _Comments_
+
+
+
+### **As an authorized user and creator of a board, I want to be able to control the permissions of other team members so that I can delegate some of my authority.**
+### _Questions_
+* Will a board creator be able to grant and revoke permissions of other team members of a board?
+    * Yes, a board creator will be able to grant and revoke permissions.
+### _Acceptance Criteria_
+1. As a logged-in user
+    * When the board owner/creator assigns members to cards, they will have editing permissions on that card
+## User Access to Boards

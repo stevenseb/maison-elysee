@@ -1,5 +1,5 @@
 'use client';
-import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, ReactNode, useState } from 'react';
 
 interface CartItem {
   _id: string;
@@ -97,6 +97,7 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, { items: [], isVisible: false });
+  const [showModal, setShowModal] = useState(false);
 
   // Persist cart to session storage
   useEffect(() => {
@@ -118,25 +119,34 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
         dispatch({ type: 'CLEAR_CART' });
-        alert('Cart has been cleared due to 30 minutes of inactivity.');
+        setShowModal(true);
       }, 30 * 60 * 1000); // 30 minutes
     };
-
-    window.addEventListener('mousemove', resetTimer);
-    window.addEventListener('keydown', resetTimer);
 
     resetTimer();
 
     return () => {
       clearTimeout(timer);
-      window.removeEventListener('mousemove', resetTimer);
-      window.removeEventListener('keydown', resetTimer);
     };
-  }, [dispatch]);
+  }, [state.items, dispatch]);
 
   return (
     <CartContext.Provider value={{ state, dispatch }}>
       {children}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-4 rounded shadow-lg">
+            <h2 className="text-lg font-bold text-black">Notification</h2>
+            <p>The cart has been cleared due to inactivity.</p>
+            <button
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+              onClick={() => setShowModal(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </CartContext.Provider>
   );
 };
@@ -147,4 +157,4 @@ export const useCart = () => {
     throw new Error('useCart must be used within a CartProvider');
   }
   return context;
-};
+}

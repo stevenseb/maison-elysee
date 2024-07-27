@@ -1,14 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import uploadFile from '@/utils/uploadImage';
 import dbConnect from '@/lib/dbConnect';
 import Item from '@/models/Item';
+import { NextRequest, NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
-// export const api = {
-//   bodyParser: false,
-// };
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
@@ -22,25 +19,25 @@ export async function POST(request: NextRequest) {
   try {
     // Save main image to temporary file
     const mainImageBuffer = await mainImage.arrayBuffer();
-    const mainImagePath = `/tmp/${uuidv4()}-${mainImage.name}`;
+    const mainImagePath = `/tmp/${uuidv4()}-${encodeURIComponent(mainImage.name)}`;
     await fs.writeFile(mainImagePath, Buffer.from(mainImageBuffer));
 
     // Upload main image
-    const mainImageUrl = await uploadFile(mainImagePath, mainImage.name);
+    const mainImageUrl = await uploadFile(mainImagePath, encodeURIComponent(mainImage.name));
 
     // Process additional images
     const additionalImageUrls = await Promise.all(
       additionalImages.map(async (image) => {
         const imageBuffer = await image.arrayBuffer();
-        const imagePath = `/tmp/${uuidv4()}-${image.name}`;
+        const imagePath = `/tmp/${uuidv4()}-${encodeURIComponent(image.name)}`;
         await fs.writeFile(imagePath, Buffer.from(imageBuffer));
-        return uploadFile(imagePath, image.name);
+        return uploadFile(imagePath, encodeURIComponent(image.name));
       })
     );
 
     // Clean up temporary files
     await fs.unlink(mainImagePath);
-    await Promise.all(additionalImages.map((_, index) => fs.unlink(`/tmp/${uuidv4()}-${additionalImages[index].name}`)));
+    await Promise.all(additionalImages.map((_, index) => fs.unlink(`/tmp/${uuidv4()}-${encodeURIComponent(additionalImages[index].name)}`)));
 
     // Connect to MongoDB
     await dbConnect();

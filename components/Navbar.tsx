@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { HoveredLink, Menu, MenuItem, ProductItem } from './ui/navbar-menu';
 import { cn } from '@/lib/utils';
 import SignupModal from './SignupModal';
@@ -44,7 +44,7 @@ export default function Navbar({ className }: { className?: string }) {
       <SignupModal isOpen={isSignupModalOpen} onClose={closeModals} />
       <LoginModal isOpen={isLoginModalOpen} onClose={closeModals} />
 
-      <div className={cn('fixed top-1 inset-x-0 mx-auto z-50 navbar opacity-83', className)}>
+      <div className={cn('fixed top-1 inset-x-0 mx-auto z-50 navbar', className)}>
         <Menu setActive={setActive}>
           <MenuItem setActive={setActive} active={active} item="New">
             <div className="dropdown text-sm grid grid-cols-2 gap-5 p-2 opacity-1">
