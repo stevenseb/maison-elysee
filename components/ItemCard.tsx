@@ -36,7 +36,6 @@ export default function ItemCard({ item }: ItemCardProps) {
 
   const handleAddToCart = () => {
     const selectedSize = size[0];
-    console.log('Add to cart clicked'); // Log to verify click
     dispatch({
       type: 'ADD_ITEM',
       payload: {
@@ -56,46 +55,51 @@ export default function ItemCard({ item }: ItemCardProps) {
       mainColor,
       price: saleDiscount ? Number(discountedPrice) : price,
       quantity: 1,
-    }); // Log to verify dispatch
+    });
   };
 
-  // Define the base URL for your Bunny CDN pull zone
   const baseUrl = 'https://maison-elysee.b-cdn.net/';
-
-  // Get the main image URL or the first image if no main image is set
   const mainImageUrl = images.find(img => img.main)?.url || images[0]?.url;
   const fullImageUrl = `${baseUrl}${mainImageUrl}`;
 
   return (
-    <div className="bg-gray-800 p-6 rounded-lg shadow-md">
-      <Link href={`/item/${_id}`}>
-        <div className="relative pt-[75%] overflow-hidden rounded-md mb-6">
+    <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md flex flex-col h-full">
+      <Link href={`/item/${_id}`} className="block flex-grow">
+        <div className="relative pt-[100%] overflow-hidden rounded-md mb-4">
           <img
             src={fullImageUrl}
             alt={name}
-            className="absolute top-0 left-0 w-full h-full object-cover"
+            className="absolute top-0 left-0 w-full h-full object-contain"
           />
         </div>
+        <h3 className="text-base font-bold sm:text-sm mb-2 text-orange-300 line-clamp-1">{name}</h3>
+        <p className="text-xs mb-2 text-orange-200 line-clamp-2">{description}</p>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs text-orange-200">{gender}</p>
+          <p className="text-xs text-orange-200">{style}</p>
+        </div>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs text-orange-200">Color: {mainColor}</p>
+          <p className="text-xs text-orange-200">Size: {size.join(', ')}</p>
+        </div>
       </Link>
-      <h3 className="text-lg font-bold mb-2">{name}</h3>
-      <p className="text-sm mb-2">{description}</p>
-      <p className="text-sm mb-2">Category: {category}</p>
-      <p className="text-sm mb-2">Gender: {gender}</p>
-      <p className="text-sm mb-2">Style: {style}</p>
-      <div className="flex items-center justify-between mb-2">
-        <p className="text-sm">Color: {mainColor}</p>
-        <p className="text-sm">Size: {size.join(', ')}</p>
-      </div>
       {saleDiscount ? (
-        <div className="text-red-500 font-bold">
+        <div className="text-red-500 font-bold text-sm sm:text-base">
           <span className="line-through">${price.toFixed(2)}</span> ${discountedPrice}
         </div>
       ) : (
-        <div className="font-bold">${price.toFixed(2)}</div>
+        <div className="font-bold text-yellow-100 text-sm sm:text-base">${price.toFixed(2)}</div>
       )}
+      <div className="rating">
+  <input type="radio" name="rating-4" className="mask mask-star-2 bg-green-500" />
+  <input type="radio" name="rating-4" className="mask mask-star-2 bg-green-500" defaultChecked />
+  <input type="radio" name="rating-4" className="mask mask-star-2 bg-green-500" />
+  <input type="radio" name="rating-4" className="mask mask-star-2 bg-green-500" />
+  <input type="radio" name="rating-4" className="mask mask-star-2 bg-green-500" />
+</div>
       <button 
         onClick={handleAddToCart} 
-        className="mt-4 w-full bg-orange-300 hover:bg-orange-400 text-black font-bold py-2 px-4 rounded"
+        className="mt-4 w-full bg-orange-300 hover:bg-orange-400 text-black font-bold py-2 px-4 rounded text-sm sm:text-base"
       >
         Add to Cart
       </button>

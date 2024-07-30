@@ -6,6 +6,9 @@ import { cn } from '@/lib/utils';
 import SignupModal from './SignupModal';
 import LoginModal from './LoginModal';
 import { signOut, useSession } from 'next-auth/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
+
 
 export default function Navbar({ className }: { className?: string }) {
   const [active, setActive] = useState<string | null>(null);
@@ -108,6 +111,7 @@ export default function Navbar({ className }: { className?: string }) {
               <HoveredLink href="/cart">Shopping Cart</HoveredLink>
             </div>
           </MenuItem>
+          <HoveredLink href="/t-shirts"><FontAwesomeIcon icon={faHome} className="mr-2" /></HoveredLink>
         </Menu>
       </div>
     </>

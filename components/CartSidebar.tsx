@@ -35,17 +35,17 @@ const CartSidebar = () => {
                 <div key={`${item._id}-${item.size}-${item.mainColor}`} className="mb-4">
                   <div className="flex justify-between">
                     <p className="pr-4 text-orange-300 text-xs">{item.name}</p>
-                    <p className="text-orange-500 text-xs">${item.price.toFixed(2)}</p>
                   </div>
                   <div className="flex justify-between">
                     <p className="text-xs">{item.size}</p>
                     <p className="text-xs">{item.mainColor}</p>
+                    <p className="text-orange-500 text-xs">${item.price.toFixed(2)}</p>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-xs">Quantity: {item.quantity}</p>
                     <div>
-                      <button onClick={() => dispatch({ type: 'INCREASE_QUANTITY', payload: { _id: item._id, size: item.size, mainColor: item.mainColor } })} className="text-xs px-1">&uarr;</button>
-                      <button onClick={() => dispatch({ type: 'DECREASE_QUANTITY', payload: { _id: item._id, size: item.size, mainColor: item.mainColor } })} className="text-xs px-1">&darr;</button>
+                      <button onClick={() => dispatch({ type: 'INCREASE_QUANTITY', payload: { _id: item._id, size: item.size, mainColor: item.mainColor } })} className="text-xs px-2 border-solid border-gray-200">&uarr;</button>
+                      <button onClick={() => dispatch({ type: 'DECREASE_QUANTITY', payload: { _id: item._id, size: item.size, mainColor: item.mainColor } })} className="text-xs px-2 border-solid">&darr;</button>
                     </div>
                   </div>
                 </div>

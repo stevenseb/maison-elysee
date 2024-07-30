@@ -14,7 +14,7 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
-  --navbar-width: 420px;
+  --navbar-width: 430px;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -4,7 +4,7 @@ export interface Image {
   }
   
 export interface Item {
-    _id: string;
+    _id?: string;
     name: string;
     size: string[];
     mainColor: string;
@@ -13,7 +13,7 @@ export interface Item {
     gender: 'mens' | 'womens' | 'unisex';
     category: 'shirt' | 'pants' | 'dress' | 'shorts' | 't-shirt';
     style: string;
-    images: { url: string; main: boolean }[];
+    images: { url: string; main?: boolean }[];
     saleDiscount?: number;
     quantity: number;
   }
