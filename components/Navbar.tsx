@@ -111,7 +111,7 @@ export default function Navbar({ className }: { className?: string }) {
               <HoveredLink href="/cart">Shopping Cart</HoveredLink>
             </div>
           </MenuItem>
-          <HoveredLink href="/t-shirts"><FontAwesomeIcon icon={faHome} className="mr-2" /></HoveredLink>
+          <HoveredLink href="/"><FontAwesomeIcon icon={faHome} className="mr-2" /></HoveredLink>
         </Menu>
       </div>
     </>
