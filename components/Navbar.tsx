@@ -105,6 +105,7 @@ export default function Navbar({ className }: { className?: string }) {
                 <>
                   <HoveredLink href="/profile">Profile</HoveredLink>
                   <HoveredLink href="/orders">Orders</HoveredLink>
+                  <HoveredLink href="/admin">Dashboard</HoveredLink>
                   <HoveredLink href="#" onClick={handleLogout}>Logout</HoveredLink>
                 </>
               )}

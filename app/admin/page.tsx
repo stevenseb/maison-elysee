@@ -3,6 +3,7 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { Item } from './types';
 import { fetchItems, handleDelete, handleUpdateQuantity, handleUpdateItem } from './utils';
+import Link from 'next/link';
 
 export default function AdminPage() {
   const [form, setForm] = useState<Omit<Item, '_id'>>({
@@ -189,15 +190,20 @@ export default function AdminPage() {
           <span className="block sm:inline">Item created successfully! Item ID: {createdItemId}</span>
         </div>
       )}
-      <button onClick={() => setShowForm(!showForm)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
+      <button onClick={() => setShowForm(!showForm)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 border-2 border-white">
         {showForm ? 'Minimize Form' : 'Expand Form'}
       </button>
+      <Link href="/">
+              <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 m-3 mb-4 rounded border-2 border-white">
+                Home
+              </button>
+            </Link>
       {showForm && (
         <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div className="flex flex-col">
             <label className="block">Name</label>
           <input name="name" value={form.name} onChange={handleChange} className="w-full px-2 py-1 border rounded bg-gray-700 text-white"
-              required placeholder="Name" />
+              required placeholder="Name" /> 
           </div>
           <div className="flex flex-col">
         <label className="block">Size</label>
@@ -246,8 +252,8 @@ export default function AdminPage() {
             <label className="block">Sale Discount</label>
           <input name="saleDiscount" value={form.saleDiscount} onChange={handleChange} placeholder="Sale Discount" type="number" className="w-full px-4 py-2 border rounded bg-gray-700 text-white"/>
             </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-300" htmlFor="images">
+            <div className="flex flex-col">
+            <label className="block" htmlFor="images">
               Images
             </label>
             <input
@@ -256,12 +262,12 @@ export default function AdminPage() {
               name="images"
               multiple
               onChange={handleImageChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="w-full px-4 py-2 border rounded bg-gray-700 text-white"
             />
           </div>
           {images.length > 0 && (
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="mainImageIndex">
+            <div className="flex flex-col">
+              <label className="block" htmlFor="mainImageIndex">
                 Main Image Index
               </label>
               <select
@@ -269,7 +275,7 @@ export default function AdminPage() {
                 name="mainImageIndex"
                 value={mainImageIndex}
                 onChange={handleMainImageChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="w-full px-4 py-2 border rounded bg-gray-700 text-white"
               >
                 {images.map((_, index) => (
                   <option key={index} value={index}>
@@ -280,7 +286,7 @@ export default function AdminPage() {
             </div>
           )}
           <div className="col-span-full">
-            <button type="submit" className="px-2 py-2 mb-5 bg-blue-500 text-white rounded border border-white">
+            <button type="submit" className="px-2 py-2 mb-5 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded border border-white">
               {isUpdating ? 'Update Item' : 'Add Item'}
             </button>
           </div>

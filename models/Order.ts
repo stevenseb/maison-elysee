@@ -1,4 +1,3 @@
-// models/Order.ts
 import mongoose, { Schema, Document, Model } from 'mongoose';
 const { v4: uuidv4 } = require('uuid');
 
@@ -15,7 +14,7 @@ export interface IOrder extends Document {
   userId: string;
   orderId: string;
   orderDate: Date;
-  shippingDate: Date;
+  shippingDate?: Date;
   items: IOrderItem[];
 }
 
@@ -32,8 +31,17 @@ const OrderSchema: Schema<IOrder> = new Schema({
   userId: { type: String, required: true },
   orderId: { type: String, default: uuidv4, unique: true },
   orderDate: { type: Date, default: Date.now },
-  shippingDate: { type: Date, required: true },
+  shippingDate: { type: Date, required: false },
   items: [OrderItemSchema],
+});
+
+// Pre-save hook to set shippingDate 2 days after orderDate
+OrderSchema.pre<IOrder>('save', function (next) {
+  if (!this.shippingDate) {
+    const orderDate = this.orderDate || new Date();
+    this.shippingDate = new Date(orderDate.getTime() + 2 * 24 * 60 * 60 * 1000); // 2 days after orderDate
+  }
+  next();
 });
 
 const Order: Model<IOrder> = mongoose.models.Order || mongoose.model<IOrder>('Order', OrderSchema);

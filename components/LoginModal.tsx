@@ -26,6 +26,20 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
+  const handleDemoLogin = async () => {
+    const res = await signIn('credentials', {
+      redirect: false,
+      usernameOrEmail: 'Demo',
+      password: 'password',
+    });
+
+    if (res?.ok) {
+      onClose();
+    } else {
+      console.error('Error during demo login:', res);
+    }
+  };
+
   const handleClickOutside = (e: React.MouseEvent) => {
     if ((e.target as Element).classList.contains('modal-overlay')) {
       onClose();
@@ -63,8 +77,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             Login
           </button>
         </form>
-        <button onClick={onClose} className="mt-4 text-orange-200">
+        <button onClick={onClose} className="m-4 text-orange-200">
           Close
+        </button>
+        <button onClick={handleDemoLogin} className="m-4 ml-12 text-orange-300">
+          Demo Login
         </button>
       </div>
     </div>
