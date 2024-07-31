@@ -25,6 +25,7 @@ export default function RootLayout({
       <body className="bg-gray-900 text-white">
         <Providers>
           <ClientLayout>{children}</ClientLayout>
+          <SpeedInsights />
         </Providers>
       </body>
     </html>
